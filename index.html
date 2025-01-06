@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barry the Storyteller Bear</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #87CEEB, #98FB98);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .bear {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            margin: 0 auto 2rem;
+        }
+
+        .bear-body {
+            width: 180px;
+            height: 180px;
+            background: #8B4513;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .bear-face {
+            width: 140px;
+            height: 140px;
+            background: #A0522D;
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .eye {
+            width: 20px;
+            height: 20px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 50px;
+        }
+
+        .eye.left { left: 30px; }
+        .eye.right { right: 30px; }
+
+        .nose {
+            width: 30px;
+            height: 20px;
+            background: black;
+            border-radius: 20px;
+            position: absolute;
+            bottom: 40px;
+            left: 55px;
+        }
+
+        .ear {
+            width: 40px;
+            height: 40px;
+            background: #8B4513;
+            border-radius: 50%;
+            position: absolute;
+            top: -10px;
+        }
+
+        .ear.left { left: 20px; }
+        .ear.right { right: 20px; }
+
+        .story-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            min-height: 100px;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 25px;
+            background: #8B4513;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #A0522D;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .scene-items {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1rem 0;
+            min-height: 50px;
+        }
+
+        .scene-item {
+            font-size: 2rem;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            transition: background 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="bear">
+            <div class="bear-body">
+                <div class="bear-face">
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+                    <div class="nose"></div>
+                </div>
+                <div class="ear left"></div>
+                <div class="ear right"></div>
+            </div>
+        </div>
+        <div class="scene-items" id="sceneItems"></div>
+        <div class="story-text" id="storyText"></div>
+        <div class="buttons">
+            <button id="prevBtn" onclick="previousPage()" disabled>Previous</button>
+            <button id="nextBtn" onclick="nextPage()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const story = [
+            {
+                text: "Hi there! I'm Barry the Bear, and today I'm going to tell you about my magical forest adventure!",
+                items: ["👋"],
+                background: "#87CEEB"
+            },
+            {
+                text: "It all started one beautiful morning when I was having my favorite breakfast - honey pancakes with blueberries!",
+                items: ["🥞", "🍯"],
+                background: "#FFE4B5"
+            },
+            {
+                text: "Suddenly, I heard the most beautiful music coming from deep in the forest. It sounded like a thousand tiny bells!",
+                items: ["🎵", "🎶"],
+                background: "#98FB98"
+            },
+            {
+                text: "I followed the magical sound through the tall trees. The birds seemed to be dancing to the melody!",
+                items: ["🌳", "🐦"],
+                background: "#90EE90"
+            },
+            {
+                text: "Deep in the forest, I found a sparkling stream where rainbow-colored fish were jumping!",
+                items: ["🌊", "🐠"],
+                background: "#87CEEB"
+            },
+            {
+                text: "But what really caught my eye was a tiny door at the base of an old oak tree, glowing with a soft blue light.",
+                items: ["🚪", "✨"],
+                background: "#DDA0DD"
+            },
+            {
+                text: "When I knocked on the door (very gently, because bear paws can be quite strong), guess who answered?",
+                items: ["❓", "🐾"],
+                background: "#FFB6C1"
+            },
+            {
+                text: "A family of magical mice! They were playing tiny instruments and needed help preparing for the forest's annual concert!",
+                items: ["🐭", "🎻"],
+                background: "#98FB98"
+            },
+            {
+                text: "As the sun began to set, fireflies came out to be our spotlights, and the concert was absolutely magical!",
+                items: ["🌅", "⭐"],
+                background: "#FFB6C1"
+            },
+            {
+                text: "Now, every full moon, I join my musical mice friends for a magical forest concert. Sometimes, if you listen carefully at night...",
+                items: ["🌕", "🎵"],
+                background: "#4B0082"
+            }
+        ];
+
+        let currentPage = 0;
+
+        function updatePage() {
+            const page = story[currentPage];
+            document.getElementById('storyText').textContent = page.text;
+            document.getElementById('prevBtn').disabled = currentPage === 0;
+            document.getElementById('nextBtn').disabled = currentPage === story.length - 1;
+            document.getElementById('nextBtn').textContent = currentPage === story.length - 1 ? "Start Over" : "Next";
+            
+            // Update scene items
+            const sceneItems = document.getElementById('sceneItems');
+            sceneItems.innerHTML = page.items.map(item => `<div class="scene-item">${item}</div>`).join('');
+            
+            // Update background
+            document.querySelector('.background').style.background = page.background;
+        }
+
+        function nextPage() {
+            if (currentPage === story.length - 1) {
+                currentPage = 0;
+            } else {
+                currentPage++;
+            }
+            updatePage();
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                updatePage();
+            }
+        }
+
+        // Initialize the first page
+        updatePage();
+    </script>
+</body>
+</html>
